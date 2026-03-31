@@ -24,13 +24,13 @@ public class DishController {
         this.ingredientRepository = ingredientRepository;
     }
 
-    // d) GET /dishes
+
     @GetMapping
     public ResponseEntity<List<Dish>> getAllDishes() {
         return ResponseEntity.ok(dishRepository.findAll());
     }
 
-    // e) PUT /dishes/{id}/ingredients
+
     @PutMapping("/{id}/ingredients")
     public ResponseEntity<?> updateDishIngredients(
             @PathVariable int id,
@@ -47,7 +47,7 @@ public class DishController {
                     .body("Dish.id=" + id + " is not found");
         }
 
-        // Ignorer les ingrédients inconnus en base
+
         List<Ingredient> validIngredients = new ArrayList<>();
         for (Ingredient ing : ingredients) {
             ingredientRepository.findById(ing.getId())

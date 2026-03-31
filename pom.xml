@@ -11,8 +11,8 @@
         <version>3.2.0</version>
     </parent>
 
-    <groupId>com.restaurant</groupId>
-    <artifactId>td5-webservice</artifactId>
+    <groupId>com.hei</groupId>
+    <artifactId>td5webservice</artifactId>
     <version>1.0.0</version>
 
     <properties>

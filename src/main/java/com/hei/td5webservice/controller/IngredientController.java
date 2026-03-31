@@ -23,13 +23,13 @@ public class IngredientController {
         this.stockMovementRepository = stockMovementRepository;
     }
 
-    // a) GET /ingredients
+
     @GetMapping
     public ResponseEntity<List<Ingredient>> getAllIngredients() {
         return ResponseEntity.ok(ingredientRepository.findAll());
     }
 
-    // b) GET /ingredients/{id}
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getIngredientById(@PathVariable int id) {
         Optional<Ingredient> ingredient = ingredientRepository.findById(id);
@@ -40,7 +40,7 @@ public class IngredientController {
         return ResponseEntity.ok(ingredient.get());
     }
 
-    // c) GET /ingredients/{id}/stock?at={temporal}&unit={unit}
+
     @GetMapping("/{id}/stock")
     public ResponseEntity<?> getIngredientStock(
             @PathVariable int id,

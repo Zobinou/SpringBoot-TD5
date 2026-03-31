@@ -18,7 +18,7 @@ public class StockMovementRepository {
 
     public Optional<StockMovement> findStockByIngredientAtAndUnit(int ingredientId, String at, String unit) {
         String sql = "SELECT unit, value FROM stock_movement " +
-                "WHERE ingredient_id = ? AND unit = ? AND created_at <= ?::timestamp " +
+                "WHERE id_ingredient = ? AND unit = ? AND created_at <= ?::timestamp " +
                 "ORDER BY created_at DESC LIMIT 1";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
