@@ -21,7 +21,7 @@ public class DishRepository {
 
     public List<Dish> findAll() {
         List<Dish> dishes = new ArrayList<>();
-        String sql = "SELECT id, name, dish_type, price FROM dish";
+        String sql = "SELECT id, name, price FROM dish";
         try (Connection conn = dataSource.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -39,7 +39,7 @@ public class DishRepository {
     }
 
     public Optional<Dish> findById(int id) {
-        String sql = "SELECT id, name, dish_type, price FROM dish WHERE id = ?";
+        String sql = "SELECT id, name, price FROM dish WHERE id = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -62,7 +62,8 @@ public class DishRepository {
 
     public void updateIngredients(int dishId, List<Ingredient> ingredients) {
         String deleteSql = "DELETE FROM dish_ingredient WHERE id_dish = ?";
-        String insertSql = "INSERT INTO dish_ingredient (id_dish, id_ingredient) VALUES (?, ?)";
+        String insertSql = "INSERT INTO dish_ingredient (id_dish, id_ingredient, quantity_required, unit) " +
+                "VALUES (?, ?, ?, ?)";
         try (Connection conn = dataSource.getConnection()) {
             conn.setAutoCommit(false);
             try {
@@ -74,6 +75,8 @@ public class DishRepository {
                     for (Ingredient ing : ingredients) {
                         insertPs.setInt(1, dishId);
                         insertPs.setInt(2, ing.getId());
+                        insertPs.setDouble(3, 1.0);
+                        insertPs.setString(4, "PCS");
                         insertPs.addBatch();
                     }
                     insertPs.executeBatch();
