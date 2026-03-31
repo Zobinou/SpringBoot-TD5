@@ -1,5 +1,6 @@
 package com.hei.td5webservice.controller;
 
+import com.hei.td5webservice.entity.CreateStockMovement;
 import com.hei.td5webservice.entity.Ingredient;
 import com.hei.td5webservice.entity.StockMovement;
 import com.hei.td5webservice.repository.IngredientRepository;
@@ -7,6 +8,7 @@ import com.hei.td5webservice.repository.StockMovementRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,5 +69,39 @@ public class IngredientController {
         }
 
         return ResponseEntity.ok(stock.get());
+    }
+
+
+    @GetMapping("/{id}/stockMovements")
+    public ResponseEntity<?> getStockMovements(
+            @PathVariable int id,
+            @RequestParam Instant from,
+            @RequestParam Instant to) {
+
+        Optional<Ingredient> ingredient = ingredientRepository.findById(id);
+        if (ingredient.isEmpty()) {
+            return ResponseEntity.status(404)
+                    .body("Ingredient.id=" + id + " is not found");
+        }
+
+        List<StockMovement> movements =
+                stockMovementRepository.findByIngredientAndDateRange(id, from, to);
+        return ResponseEntity.ok(movements);
+    }
+
+
+    @PostMapping("/{id}/stockMovements")
+    public ResponseEntity<?> addStockMovements(
+            @PathVariable int id,
+            @RequestBody List<CreateStockMovement> creations) {
+
+        Optional<Ingredient> ingredient = ingredientRepository.findById(id);
+        if (ingredient.isEmpty()) {
+            return ResponseEntity.status(404)
+                    .body("Ingredient.id=" + id + " is not found");
+        }
+
+        List<StockMovement> created = stockMovementRepository.saveAll(id, creations);
+        return ResponseEntity.ok(created);
     }
 }
